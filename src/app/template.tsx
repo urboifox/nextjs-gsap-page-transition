@@ -8,6 +8,7 @@ export default function AppTemplate({ children }: { children: React.ReactNode })
             opacity: 0,
         }, {
             opacity: 1,
+            duration: 0.2
         })
     }, [])
 

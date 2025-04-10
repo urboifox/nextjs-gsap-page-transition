@@ -1,25 +1,26 @@
 "use client";
 import gsap from "gsap";
 import { useRouter } from "next/navigation"
-import React, { LinkHTMLAttributes } from "react";
+import { ComponentProps } from "react";
+import Link from "next/link";
 
-export default function TransitionLink({ children, ...rest }: LinkHTMLAttributes<HTMLAnchorElement>) {
+export default function TransitionLink({ children, ...rest }: ComponentProps<typeof Link>) {
     const router = useRouter();
 
-    function handleNavigate(event: React.MouseEvent<HTMLAnchorElement>) {
-        event.preventDefault();
-        rest.onClick?.(event);
-        if (!rest.href) return;
-
-        gsap.to(document.body, {
-            opacity: 0,
-            onComplete: () => {
-                router.push(rest.href!);
-            }
-        })
-    }
-
     return (
-        <a {...rest} onClick={handleNavigate}>{children}</a>
+        <Link {...rest} onNavigate={(event) => {
+            event.preventDefault();
+            if (!rest.href) return;
+
+            gsap.to(document.body, {
+                opacity: 0,
+                duration: 0.2,
+                onComplete: () => {
+                    router.push(rest.href.toString());
+                }
+            })
+        }}>
+            {children}
+        </Link>
     )
 }
